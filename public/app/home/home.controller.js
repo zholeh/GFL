@@ -26,10 +26,9 @@
     $scope.users = [];
     $scope.newUser = "";
 
-    function TaskEditController($scope, $mdDialog, task, users) {
-
+    function TaskEditController($scope, $mdDialog, task, users, tasks) {
       $scope.task = deepCopy(task);
-      // $scope.task = task;
+      $scope.tasks = tasks;
       $scope.users = users;
       $scope.searchText = "";
 
@@ -43,8 +42,32 @@
       };
       $scope.cancelTaskEditor = function(res) {
         if (!!res) {
-          $scope.task = deepCopy(task);
-          $mdDialog.hide(res);
+          var newTask = deepCopy(res);
+          // var userId = newTask.userId._id
+          // delete newTask['userId'];
+          // newTask.userId = userId;
+          $http({
+            method: "PUT",
+            url: "http://localhost:3005/api/tasks?id=" + newTask._id,
+            data: newTask
+          }).then(function success(res) {
+            if ("" + res.status === "200" && (res.data.message = "OK")) {
+              var index;
+              // var arr = res.data.res;
+              var arr = $scope.tasks;
+              for (var i = 0; i < $scope.tasks.length; i++) {
+                if ($scope.tasks[i]._id === res.data.res._id) {
+                  index = i;
+                  break;
+                }
+              }
+
+              if (index !== undefined) {
+                $scope.tasks.splice(index, 1, res.data.res);
+              }
+            }
+          });
+          $mdDialog.hide(res, $scope);
         } else $mdDialog.cancel();
       };
       $scope.selectedItemChange = function() {};
@@ -60,7 +83,8 @@
           controller: TaskEditController,
           locals: {
             task: task,
-            users: $scope.users
+            users: $scope.users,
+            tasks: $scope.tasks,
           },
           templateUrl: "/app/home/task-edit.html",
           parent: angular.element(document.body),
@@ -68,16 +92,7 @@
           clickOutsideToClose: true
         })
         .then(
-          function(res) {
-            var newTask = deepCopy(task);
-            // $http({
-            //   method: "POST",
-            //   url: "http://localhost:3005/api/tasks?id=" + newTask._id,
-            //   data: newTask
-            // }).then(function success(response) {
-            //   self.homeCtrl.loadUsers();
-            // });
-          },
+          function(res) {},
           function() {} // nothing to do
         );
     };
