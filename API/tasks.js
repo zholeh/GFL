@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const TaskModel = require("../schema/taskScheme");
 
+const optionPopulate = {
+  path: "userId",
+  select: "_id name"
+};
+
 router.use("/^(?!test).*$", (req, res, next) => {
   res.setHeader("Content-Type", "application/json");
 });
@@ -12,10 +17,7 @@ router.get("/test", function(req, res) {
 
 const getTasks = async function(req, res, param) {
   try {
-    let query = await TaskModel.find().populate({
-      path: "userId",
-      select: "_id name"
-    });
+    let query = await TaskModel.find().populate(optionPopulate);
     res.send({ message: "OK", res: query });
   } catch (err) {
     res.send({ message: "DB error", res: err });
@@ -24,10 +26,7 @@ const getTasks = async function(req, res, param) {
 
 const getTask = async function(req, res, id) {
   try {
-    let query = await TaskModel.findById(id).populate({
-      path: "userId",
-      select: "_id name"
-    });
+    let query = await TaskModel.findById(id).populate(optionPopulate);
     if (query !== null) {
       res.send({ message: "OK", res: query });
     } else {
@@ -89,7 +88,7 @@ router.put("/", async (req, res, next) => {
   try {
     let query = await TaskModel.findByIdAndUpdate(id, req.body, {
       new: true
-    });
+    }).populate(optionPopulate);
     if (query !== null) {
       res.send({ message: "OK", res: query._doc });
     } else {
