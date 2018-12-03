@@ -43,9 +43,6 @@
       $scope.cancelTaskEditor = function(res) {
         if (!!res) {
           var newTask = deepCopy(res);
-          // var userId = newTask.userId._id
-          // delete newTask['userId'];
-          // newTask.userId = userId;
           $http({
             method: "PUT",
             url: "http://localhost:3005/api/tasks?id=" + newTask._id,
@@ -53,7 +50,6 @@
           }).then(function success(res) {
             if ("" + res.status === "200" && (res.data.message = "OK")) {
               var index;
-              // var arr = res.data.res;
               var arr = $scope.tasks;
               for (var i = 0; i < $scope.tasks.length; i++) {
                 if ($scope.tasks[i]._id === res.data.res._id) {
@@ -84,7 +80,7 @@
           locals: {
             task: task,
             users: $scope.users,
-            tasks: $scope.tasks,
+            tasks: $scope.tasks
           },
           templateUrl: "/app/home/task-edit.html",
           parent: angular.element(document.body),
@@ -95,6 +91,28 @@
           function(res) {},
           function() {} // nothing to do
         );
+    };
+
+    $scope.deleteTask = function(event, task) {
+      $http({
+        method: "DELETE",
+        url: "http://localhost:3005/api/tasks?id=" + task._id
+      }).then(function success(res) {
+        if ("" + res.status === "200" && (res.data.message = "OK")) {
+          var index;
+          var arr = $scope.tasks;
+          for (var i = 0; i < $scope.tasks.length; i++) {
+            if ($scope.tasks[i]._id === res.data.res) {
+              index = i;
+              break;
+            }
+          }
+
+          if (index !== undefined) {
+            $scope.tasks.splice(index, 1);
+          }
+        }
+      });
     };
 
     $scope.handleAddNewUser = function(newUser, event) {
