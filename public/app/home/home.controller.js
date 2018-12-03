@@ -3,6 +3,21 @@
 
   angular.module("app").controller("HomeController", HomeController);
 
+  var deepCopy = function(obj) {
+    if (typeof obj != "object") {
+      return obj;
+    }
+    var copy = obj.constructor();
+    for (var key in obj) {
+      if (typeof obj[key] == "object") {
+        copy[key] = deepCopy(obj[key]);
+      } else {
+        copy[key] = obj[key];
+      }
+    }
+    return copy;
+  };
+
   function HomeController($location, $http, $scope, $mdDialog, $controller) {
     this.$location = $location;
     this.$http = $http;
@@ -12,10 +27,12 @@
     $scope.newUser = "";
 
     function TaskEditController($scope, $mdDialog, task, users) {
-      $scope.task = Object.assign({}, task);
+
+      $scope.task = deepCopy(task);
+      // $scope.task = task;
       $scope.users = users;
       $scope.searchText = "";
-      
+
       $scope.filterUsersByName = function(queryName) {
         if (!queryName) return $scope.users;
         else
@@ -25,9 +42,8 @@
           });
       };
       $scope.cancelTaskEditor = function(res) {
-
         if (!!res) {
-          $scope.task = Object.assign({}, res);
+          $scope.task = deepCopy(task);
           $mdDialog.hide(res);
         } else $mdDialog.cancel();
       };
@@ -53,9 +69,16 @@
         })
         .then(
           function(res) {
+            var newTask = deepCopy(task);
+            // $http({
+            //   method: "POST",
+            //   url: "http://localhost:3005/api/tasks?id=" + newTask._id,
+            //   data: newTask
+            // }).then(function success(response) {
+            //   self.homeCtrl.loadUsers();
+            // });
           },
-          function() {
-          }
+          function() {} // nothing to do
         );
     };
 
