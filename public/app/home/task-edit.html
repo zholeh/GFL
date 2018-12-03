@@ -13,9 +13,41 @@
 
     <md-dialog-content>
       <div class="md-dialog-content flex-inline-start">
-        <!-- <h2>{{ task.userId.name }}</h2> -->
+        <md-autocomplete
+          md-input-class="autocomplete--large autocomplete--bold"
+          md-selected-item="task.userId"
+          md-search-text-change="searchTextChange(searchText)"
+          md-search-text="searchText"
+          md-selected-item-change="task.userId = user"
+          md-items="user in filterUsersByName(searchText)"
+          md-item-text="user.name"
+          md-min-length="0"
+          placeholder=""
+        >
+          <md-item-template>
+            <span md-highlight-text="searchText" md-highlight-flags="^i">{{
+              user.name
+            }}</span>
+            <!-- <h2>{{ task.userId.name }}</h2> -->
+          </md-item-template>
+          <md-not-found>
+            No states matching "{{ searchText }}" were found.
+          </md-not-found>
+        </md-autocomplete>
+        <md-input-container style="width: 100%;">
+          <label for="description01">Description</label>
+          <textarea
+            ng-model="task.description"
+            name="description"
+            id="description01"
+            cols="30"
+            rows="10"
+          >
+          </textarea>
+        </md-input-container>
 
         <div>
+          <label>Importance: {{ task.importance }}</label>
           <md-slider-container flex>
             <md-slider
               ng-model="task.importance"
@@ -23,38 +55,13 @@
               max="10"
               aria-label="importance"
               class="md-accent"
-              md-vertical
+              md-horizontal
             ></md-slider>
-            <h5>Importance: {{ task.importance }}</h5>
           </md-slider-container>
         </div>
 
-        <div>
-          <md-autocomplete
-            md-input-class="autocomplete--large autocomplete--bold"
-            md-selected-item="task.userId"
-            md-search-text-change="searchTextChange(searchText)"
-            md-search-text="searchText"
-            md-selected-item-change="task.userId = user"
-            md-items="user in filterUsersByName(searchText)"
-            md-item-text="user.name"
-            md-min-length="0"
-            placeholder=""
-          >
-            <md-item-template>
-              <span md-highlight-text="searchText" md-highlight-flags="^i">{{
-                user.name
-              }}</span>
-              <!-- <h2>{{ task.userId.name }}</h2> -->
-            </md-item-template>
-            <md-not-found>
-              No states matching "{{ searchText }}" were found.
-            </md-not-found>
-          </md-autocomplete>
-
-          <p>{{ task.description }}</p>
-          <md-switch ng-model="task.done" aria-label="done"> done </md-switch>
-        </div>
+        <p>{{ task.description }}</p>
+        <md-switch ng-model="task.done" aria-label="done"> done </md-switch>
       </div>
     </md-dialog-content>
 
