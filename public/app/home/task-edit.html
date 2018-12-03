@@ -1,0 +1,66 @@
+<md-dialog style="width: 75%" aria-label="Mango (Fruit)">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <!-- <h2>Mango (Fruit)</h2> -->
+        <h2>{{ task.name }}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancelTaskEditor()"
+          >✖</md-button
+        >
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content flex-inline-start">
+        <!-- <h2>{{ task.userId.name }}</h2> -->
+
+        <div>
+          <md-slider-container flex>
+            <md-slider
+              ng-model="task.importance"
+              min="0"
+              max="10"
+              aria-label="importance"
+              class="md-accent"
+              md-vertical
+            ></md-slider>
+            <h5>Importance: {{ task.importance }}</h5>
+          </md-slider-container>
+        </div>
+
+        <div>
+          <md-autocomplete
+            md-input-class="autocomplete--large autocomplete--bold"
+            md-selected-item="task.userId"
+            md-search-text-change="searchTextChange(searchText)"
+            md-search-text="searchText"
+            md-selected-item-change="task.userId = user"
+            md-items="user in filterUsersByName(searchText)"
+            md-item-text="user.name"
+            md-min-length="0"
+            placeholder=""
+          >
+            <md-item-template>
+              <span md-highlight-text="searchText" md-highlight-flags="^i">{{
+                user.name
+              }}</span>
+              <!-- <h2>{{ task.userId.name }}</h2> -->
+            </md-item-template>
+            <md-not-found>
+              No states matching "{{ searchText }}" were found.
+            </md-not-found>
+          </md-autocomplete>
+
+          <p>{{ task.description }}</p>
+          <md-switch ng-model="task.done" aria-label="done"> done </md-switch>
+        </div>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+      <span flex></span>
+      <md-button ng-click="cancelTaskEditor('OK')"> OK </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

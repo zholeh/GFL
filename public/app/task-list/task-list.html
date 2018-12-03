@@ -1,0 +1,34 @@
+<div>
+  <md-card-title>
+    <md-card-title-text>
+      <span class="md-headline"> Tasks list </span>
+    </md-card-title-text>
+  </md-card-title>
+
+  <md-card ng-repeat="task in tasks">
+    <div style="position: relative;">
+      <div
+        ng-class="task.done ? 'task-list-separator task-list-separator--done' : 'task-list-separator'"
+      ></div>
+      <div style="padding-left: 15px;">
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">{{ task.name }}</span>
+            <span class="md-subhead">{{ task.description }}</span>
+          </md-card-title-text>
+        </md-card-title>
+
+        <md-card-content>
+          <div>Responsible: {{ task.userId.name }}</div>
+          <div>Execution status: {{ task.done }}</div>
+          <div>Importance: {{ task.importance }}</div>
+        </md-card-content>
+
+        <md-card-actions layout="row" layout-align="start center">
+          <md-button ng-click="showTaskEditor($event, task)">EDIT</md-button>
+          <md-button ng-click="deleteTask($event, task)">DELETE</md-button>
+        </md-card-actions>
+      </div>
+    </div>
+  </md-card>
+</div>

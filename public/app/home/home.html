@@ -1,0 +1,16 @@
+<md-tabs
+  md-dynamic-height
+  class="md-tabs"
+  md-border-bottom
+  tabindex="-1"
+  ng-show="homeCtrl.pageReady"
+  md-selected="homeCtrl.selectedIndex"
+>
+  <md-tab label="Tasks">
+    <md-content class="md-padding"> <task-list></task-list> </md-content>
+  </md-tab>
+
+  <md-tab label="Users">
+    <md-content class="md-padding"> <user-list></user-list> </md-content>
+  </md-tab>
+</md-tabs>

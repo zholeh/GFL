@@ -1,0 +1,36 @@
+<div>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline"> Users list </span>
+        <md-input-container class="md-block md-3-line" flex-gt-sm>
+          <label>New user</label>
+          <input ng-model="newUser" tabindex="1" ng-blur="handleAddNewUser(newUser)" ng-keypress="handleAddNewUser(newUser, $event)"/>
+        </md-input-container>
+      </md-card-title-text>
+    </md-card-title>
+
+    <md-content>        
+      <md-list flex>
+        <div ng-repeat="user in users">
+          <md-list-item
+            class="md-3-line"
+            ng-click="null"
+          >
+            <div
+              class="button--clear"
+              ng-click="handleClick(user)"
+              style="margin: auto 0 auto 0;
+                    padding: 0 5px;
+                    z-index: 5;"
+            >
+              ✖
+            </div>
+            <div>{{ user.name }}</div>
+          </md-list-item>
+          <md-divider></md-divider>
+        </div>
+      </md-list>
+    </md-content>
+  </md-card>
+</div>
