@@ -12,7 +12,7 @@
     $scope.newUser = "";
 
     function TaskEditController($scope, $mdDialog, task, users) {
-      $scope.task = task;
+      $scope.task = Object.assign({}, task);
       $scope.users = users;
       $scope.searchText = "";
       
@@ -24,8 +24,12 @@
             return el.name.search(reg) !== -1;
           });
       };
-      $scope.cancelTaskEditor = function() {
-        $mdDialog.cancel();
+      $scope.cancelTaskEditor = function(res) {
+
+        if (!!res) {
+          $scope.task = Object.assign({}, res);
+          $mdDialog.hide(res);
+        } else $mdDialog.cancel();
       };
       $scope.selectedItemChange = function() {};
       $scope.searchTextChange = function() {};
@@ -49,10 +53,8 @@
         })
         .then(
           function(res) {
-            $scope.status = 'You said the information was "' + res + '".';
           },
           function() {
-            $scope.status = "You cancelled the dialog.";
           }
         );
     };
