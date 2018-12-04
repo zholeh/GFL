@@ -6,21 +6,6 @@
     .controller("HomeController", HomeController)
     .controller("OptionSidenavCtrl", OptionSidenavCtrl);
 
-  var deepCopy = function(obj) {
-    if (typeof obj != "object") {
-      return obj;
-    }
-    var copy = obj.constructor();
-    for (var key in obj) {
-      if (obj[key] !== null && typeof obj[key] === "object") {
-        copy[key] = deepCopy(obj[key]);
-      } else {
-        copy[key] = obj[key];
-      }
-    }
-    return copy;
-  };
-
   function HomeController($location, $http, $scope, $mdDialog, $mdSidenav) {
     this.$location = $location;
     this.$http = $http;
@@ -149,7 +134,7 @@
   ];
 
   function TaskEditController($scope, $mdDialog, $http, task, users, tasks) {
-    $scope.task = deepCopy(task);
+    $scope.task = angular.copy(task);
     $scope.tasks = tasks;
     $scope.users = users;
     $scope.searchText = "";
@@ -164,7 +149,7 @@
     };
     $scope.cancelTaskEditor = function(res) {
       if (!!res) {
-        var newTask = deepCopy(res);
+        var newTask = angular.copy(res);
 
         var method = "POST";
         var param = "";
