@@ -16,7 +16,7 @@
   position: relative;
 }
 
-.flex-inline-start>:last-child {
+.flex-inline-start > :last-child {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -34,7 +34,23 @@
   background: #0c6d0b;
 }
 
-input.autocomplete--large.autocomplete--bold{ 
+input.autocomplete--large.autocomplete--bold {
   font-size: xx-large;
   font-weight: bold;
+}
+
+.task-card {
+  position: relative;
+}
+
+.task-topic {
+  cursor: pointer;
+}
+
+.task-topic:before {
+  content: "▲";
+}
+
+.task-topic.task-topic--collapsed:before {
+  content: "▼";
 }

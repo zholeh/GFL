@@ -33,6 +33,10 @@
       $scope.showTaskEditor(event, {});
     };
 
+    $scope.collapseTask = function(task) {
+      task.collapsed = !task.collapsed;
+    }
+
     $scope.showTaskEditor = function(event, task) {
       $mdDialog
         .show({
@@ -116,7 +120,10 @@
     self
       .$http({ method: "GET", url: "http://localhost:3005/api/tasks" })
       .then(function success(response) {
-        self.$scope.tasks = response.data.res;
+        self.$scope.tasks = response.data.res.map(function(el) {
+          el.collapsed = true;
+          return el;
+        });
         self.$scope.primaryTasks = self.$scope.tasks.concat();
       });
   };
@@ -151,7 +158,7 @@
       if (!!res) {
 
         if (this.editForm.$invalid) return;
-        
+
         var newTask = angular.copy(res);
 
         var method = "POST";
