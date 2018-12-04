@@ -1,0 +1,33 @@
+<div ng-controller="OptionController">
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">SORT</span>
+      </md-card-title-text>
+    </md-card-title>
+
+    <div ng-repeat="field in fields">
+      <md-card-actions layout="row" layout-align="start center">
+        <label class="label" style="min-width: 85px;">{{field.description}}</label>
+        <md-button class="md-raised" ng-click="sort(field.name, 'asc')">asc</md-button>
+        <md-button class="md-raised" ng-click="sort(field.name, 'desc')">desc</md-button>
+      </md-card-actions>
+    </div>
+  </md-card>
+
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">FILTER</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-content>
+      <div ng-repeat="field in fields">
+        <md-input-container style="width: 95%;">
+          <label>{{ field.description }}</label>
+          <input ng-change="filterTasks(field.name)" ng-model="filters[field.name]"/>
+        </md-input-container>
+      </div>
+    </md-content>
+  </md-card>
+</div>

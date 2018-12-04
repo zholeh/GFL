@@ -1,7 +1,10 @@
 (function() {
   "use strict";
 
-  angular.module("app").controller("HomeController", HomeController);
+  angular
+    .module("app")
+    .controller("HomeController", HomeController)
+    .controller("OptionSidenavCtrl", OptionSidenavCtrl);
 
   var deepCopy = function(obj) {
     if (typeof obj != "object") {
@@ -9,7 +12,7 @@
     }
     var copy = obj.constructor();
     for (var key in obj) {
-      if (typeof obj[key] == "object") {
+      if (typeof obj[key] === "object") {
         copy[key] = deepCopy(obj[key]);
       } else {
         copy[key] = obj[key];
@@ -18,17 +21,29 @@
     return copy;
   };
 
-  function HomeController($location, $http, $scope, $mdDialog, $controller) {
+  function HomeController($location, $http, $scope, $mdDialog, $mdSidenav) {
     this.$location = $location;
     this.$http = $http;
     this.$scope = $scope;
 
     $scope.users = [];
     $scope.newUser = "";
+    $scope.filters = {};
 
     this.loadUsers();
     this.loadTasks();
     this._init();
+
+    $scope.toggleRight = buildToggler();
+
+    function buildToggler() {
+      return function() {
+        $mdSidenav("md-sidenav-right")
+          .toggle()
+          .then(function() {
+          });
+      };
+    }
 
     $scope.showTaskEditor = function(event, task) {
       $mdDialog
@@ -67,6 +82,7 @@
 
           if (index !== undefined) {
             $scope.tasks.splice(index, 1);
+            $scope.primaryTasks = $scope.tasks.concat();
           }
         }
       });
@@ -113,7 +129,7 @@
       .$http({ method: "GET", url: "http://localhost:3005/api/tasks" })
       .then(function success(response) {
         self.$scope.tasks = response.data.res;
-        self.$scope.tasksLoaded = true;
+        self.$scope.primaryTasks = self.$scope.tasks.concat();
       });
   };
 
@@ -126,10 +142,10 @@
     "$http",
     "$scope",
     "$mdDialog",
-    "$controller"
+    "$mdSidenav"
   ];
 
-  function TaskEditController($scope, $mdDialog, task, users, tasks) {
+  function TaskEditController($scope, $mdDialog, $http, task, users, tasks) {
     $scope.task = deepCopy(task);
     $scope.tasks = tasks;
     $scope.users = users;
@@ -171,5 +187,14 @@
     };
     $scope.selectedItemChange = function() {};
     $scope.searchTextChange = function() {};
+  }
+
+  function OptionSidenavCtrl($scope, $timeout, $mdSidenav, $log) {
+    $scope.close = function() {
+      // Component lookup should always be available since we are not using `ng-if`
+      $mdSidenav("md-sidenav-right")
+        .close()
+        .then(function() {});
+    };
   }
 })();
