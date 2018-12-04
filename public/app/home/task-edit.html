@@ -1,5 +1,5 @@
 <md-dialog style="width: 75%" aria-label="Task card">
-  <form ng-cloak>
+  <form novalidate ng-cloak name="editForm" ng-submit="cancelTaskEditor(task)">
     <md-toolbar>
       <div class="md-toolbar-tools">
         <h2>{{ task.name }}</h2>
@@ -16,9 +16,11 @@
         <md-input-container ng-if=(!task._id) style="width: 100%;">
           <label for="name01">Name</label>
           <input
+            type="text"
             ng-model="task.name"
             name="name"
             id="name01"
+            required
             cols="30"
             rows="10"
           >
@@ -79,7 +81,7 @@
 
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="cancelTaskEditor(task)"> OK </md-button>
+      <md-button type="submit" ng-click="cancelTaskEditor(task)">OK</md-button>
     </md-dialog-actions>
   </form>
 </md-dialog>

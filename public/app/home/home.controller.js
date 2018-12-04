@@ -137,7 +137,7 @@
     $scope.task = angular.copy(task);
     $scope.tasks = tasks;
     $scope.users = users;
-    $scope.searchText = "";
+    $scope.editForm;
 
     $scope.filterUsersByName = function(queryName) {
       if (!queryName) return $scope.users;
@@ -149,6 +149,9 @@
     };
     $scope.cancelTaskEditor = function(res) {
       if (!!res) {
+
+        if (this.editForm.$invalid) return;
+        
         var newTask = angular.copy(res);
 
         var method = "POST";
@@ -185,8 +188,6 @@
         $mdDialog.hide(res, $scope);
       } else $mdDialog.cancel();
     };
-    $scope.selectedItemChange = function() {};
-    $scope.searchTextChange = function() {};
   }
 
   function OptionSidenavCtrl($scope, $timeout, $mdSidenav, $log) {
