@@ -2,7 +2,6 @@
   <form ng-cloak>
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <!-- <h2>Mango (Fruit)</h2> -->
         <h2>{{ task.name }}</h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancelTaskEditor()">
@@ -13,6 +12,19 @@
 
     <md-dialog-content>
       <div class="md-dialog-content">
+
+        <md-input-container ng-if=(!task._id) style="width: 100%;">
+          <label for="name01">Name</label>
+          <input
+            ng-model="task.name"
+            name="name"
+            id="name01"
+            cols="30"
+            rows="10"
+          >
+          </input>
+        </md-input-container>
+
         <md-autocomplete
           md-input-class="autocomplete--large autocomplete--bold"
           md-selected-item="task.userId"

@@ -40,10 +40,13 @@
       return function() {
         $mdSidenav("md-sidenav-right")
           .toggle()
-          .then(function() {
-          });
+          .then(function() {});
       };
     }
+
+    $scope.addTask = function(event) {
+      $scope.showTaskEditor(event, {});
+    };
 
     $scope.showTaskEditor = function(event, task) {
       $mdDialog
@@ -70,7 +73,7 @@
         method: "DELETE",
         url: "http://localhost:3005/api/tasks?id=" + task._id
       }).then(function success(res) {
-        if ("" + res.status === "200" && (res.data.message = "OK")) {
+        if ("" + res.status === "200" && (res.data.message === "OK")) {
           var index;
           var arr = $scope.tasks;
           for (var i = 0; i < $scope.tasks.length; i++) {
@@ -162,12 +165,20 @@
     $scope.cancelTaskEditor = function(res) {
       if (!!res) {
         var newTask = deepCopy(res);
+
+        var method = "POST";
+        var param = "";
+        if (!!newTask._id) {
+          method = "PUT";
+          param = "?id=" + newTask._id;
+        }
+
         $http({
-          method: "PUT",
-          url: "http://localhost:3005/api/tasks?id=" + newTask._id,
+          method: method,
+          url: "http://localhost:3005/api/tasks" + param,
           data: newTask
         }).then(function success(res) {
-          if ("" + res.status === "200" && (res.data.message = "OK")) {
+          if ("" + res.status === "200" && (res.data.message === "OK")) {
             var index;
             var arr = $scope.tasks;
             for (var i = 0; i < $scope.tasks.length; i++) {
@@ -177,8 +188,12 @@
               }
             }
 
-            if (index !== undefined) {
+            if (index !== undefined && method === "PUT") {
               $scope.tasks.splice(index, 1, res.data.res);
+              $scope.primaryTasks = $scope.tasks.concat();
+            } else if (method === "POST") {
+              $scope.tasks.push(res.data.res);
+              $scope.primaryTasks = $scope.tasks.concat();
             }
           }
         });
@@ -191,7 +206,6 @@
 
   function OptionSidenavCtrl($scope, $timeout, $mdSidenav, $log) {
     $scope.close = function() {
-      // Component lookup should always be available since we are not using `ng-if`
       $mdSidenav("md-sidenav-right")
         .close()
         .then(function() {});

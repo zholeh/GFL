@@ -1,20 +1,47 @@
-<md-tabs
-  md-dynamic-height
-  class="md-tabs"
-  md-border-bottom
-  tabindex="-1"
-  ng-show="homeCtrl.pageReady"
-  md-selected="homeCtrl.selectedIndex"
->
-  <md-tab label="Tasks">
-    <md-content class="md-padding"> <task-list></task-list> </md-content>
-  </md-tab>
-
-  <md-tab label="Users">
-    <md-content class="md-padding"> <user-list></user-list> </md-content>
-  </md-tab>
-
-  <md-tab label="Option">
-    <md-content class="md-padding"> <option></option> </md-content>
-  </md-tab>
-</md-tabs>
+<div>
+    <md-sidenav
+      class="md-sidenav-right md-whiteframe-4dp"
+      md-component-id="md-sidenav-right"
+    >
+      <md-toolbar class="md-theme-right">
+        <h1 class="md-toolbar-tools">OPTION</h1>
+      </md-toolbar>
+      <option></option>
+    </md-sidenav>
+  
+    <md-button
+      ng-click="toggleRight()"
+      class="md-primary"
+    >
+      OPTIONS
+    </md-button>
+  
+    <md-button
+      ng-click="addTask()"
+      class="md-primary"
+    >
+      ADD TASK
+    </md-button>
+  
+    <md-tabs
+      md-dynamic-height
+      class="md-tabs"
+      md-border-bottom
+      tabindex="-1"
+      ng-show="homeCtrl.pageReady"
+      md-selected="homeCtrl.selectedIndex"
+    >
+      <md-tab label="Tasks">
+        <md-content class="md-padding"> <task-list></task-list> </md-content>
+      </md-tab>
+  
+      <md-tab label="Users">
+        <md-content class="md-padding"> <user-list></user-list> </md-content>
+      </md-tab>
+  
+      <md-tab label="Option">
+        <md-content class="md-padding"> <option></option> </md-content>
+      </md-tab>
+    </md-tabs>
+  </div>
+  
