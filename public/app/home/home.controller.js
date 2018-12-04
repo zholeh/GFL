@@ -26,52 +26,9 @@
     $scope.users = [];
     $scope.newUser = "";
 
-    function TaskEditController($scope, $mdDialog, task, users, tasks) {
-      $scope.task = deepCopy(task);
-      $scope.tasks = tasks;
-      $scope.users = users;
-      $scope.searchText = "";
-
-      $scope.filterUsersByName = function(queryName) {
-        if (!queryName) return $scope.users;
-        else
-          return $scope.users.filter(function(el) {
-            var reg = new RegExp(queryName, "ui");
-            return el.name.search(reg) !== -1;
-          });
-      };
-      $scope.cancelTaskEditor = function(res) {
-        if (!!res) {
-          var newTask = deepCopy(res);
-          $http({
-            method: "PUT",
-            url: "http://localhost:3005/api/tasks?id=" + newTask._id,
-            data: newTask
-          }).then(function success(res) {
-            if ("" + res.status === "200" && (res.data.message = "OK")) {
-              var index;
-              var arr = $scope.tasks;
-              for (var i = 0; i < $scope.tasks.length; i++) {
-                if ($scope.tasks[i]._id === res.data.res._id) {
-                  index = i;
-                  break;
-                }
-              }
-
-              if (index !== undefined) {
-                $scope.tasks.splice(index, 1, res.data.res);
-              }
-            }
-          });
-          $mdDialog.hide(res, $scope);
-        } else $mdDialog.cancel();
-      };
-      $scope.selectedItemChange = function() {};
-      $scope.searchTextChange = function() {};
-    }
-
     this.loadUsers();
     this.loadTasks();
+    this._init();
 
     $scope.showTaskEditor = function(event, task) {
       $mdDialog
@@ -138,8 +95,6 @@
         self.homeCtrl.loadUsers();
       });
     };
-
-    this._init();
   }
 
   HomeController.prototype.loadUsers = function() {
@@ -162,22 +117,8 @@
       });
   };
 
-  HomeController.prototype.redirectTo = function(to) {
-    this.$location.path(to);
-  };
-
   HomeController.prototype._init = function() {
     this.pageReady = true;
-  };
-
-  HomeController.prototype.next = function(isValid) {
-    var vm = this;
-    vm.selectedIndex += 1;
-  };
-
-  HomeController.prototype.prev = function(isValid) {
-    var vm = this;
-    vm.selectedIndex -= 1;
   };
 
   HomeController.$inject = [
@@ -187,4 +128,48 @@
     "$mdDialog",
     "$controller"
   ];
+
+  function TaskEditController($scope, $mdDialog, task, users, tasks) {
+    $scope.task = deepCopy(task);
+    $scope.tasks = tasks;
+    $scope.users = users;
+    $scope.searchText = "";
+
+    $scope.filterUsersByName = function(queryName) {
+      if (!queryName) return $scope.users;
+      else
+        return $scope.users.filter(function(el) {
+          var reg = new RegExp(queryName, "ui");
+          return el.name.search(reg) !== -1;
+        });
+    };
+    $scope.cancelTaskEditor = function(res) {
+      if (!!res) {
+        var newTask = deepCopy(res);
+        $http({
+          method: "PUT",
+          url: "http://localhost:3005/api/tasks?id=" + newTask._id,
+          data: newTask
+        }).then(function success(res) {
+          if ("" + res.status === "200" && (res.data.message = "OK")) {
+            var index;
+            var arr = $scope.tasks;
+            for (var i = 0; i < $scope.tasks.length; i++) {
+              if ($scope.tasks[i]._id === res.data.res._id) {
+                index = i;
+                break;
+              }
+            }
+
+            if (index !== undefined) {
+              $scope.tasks.splice(index, 1, res.data.res);
+            }
+          }
+        });
+        $mdDialog.hide(res, $scope);
+      } else $mdDialog.cancel();
+    };
+    $scope.selectedItemChange = function() {};
+    $scope.searchTextChange = function() {};
+  }
 })();
