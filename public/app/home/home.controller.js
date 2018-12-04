@@ -12,7 +12,7 @@
     }
     var copy = obj.constructor();
     for (var key in obj) {
-      if (typeof obj[key] === "object") {
+      if (obj[key] !== null && typeof obj[key] === "object") {
         copy[key] = deepCopy(obj[key]);
       } else {
         copy[key] = obj[key];
