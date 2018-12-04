@@ -48,9 +48,9 @@ input.autocomplete--large.autocomplete--bold {
 }
 
 .task-topic:before {
-  content: "▲";
+  content: "▼";
 }
 
 .task-topic.task-topic--collapsed:before {
-  content: "▼";
+  content: "▲";
 }
