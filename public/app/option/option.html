@@ -6,7 +6,7 @@
       </md-card-title-text>
     </md-card-title>
 
-    <div ng-repeat="field in fields">
+    <div ng-repeat="field in filters">
       <md-card-actions layout="row" layout-align="start center">
         <label class="label" style="min-width: 85px;">{{field.description}}</label>
         <md-button class="md-raised" ng-click="sort(field.name, 'asc')">asc</md-button>
@@ -22,16 +22,14 @@
       </md-card-title-text>
     </md-card-title>
     <md-content>
-      <div ng-repeat="field in fields">
+      <div ng-repeat="field in filters">
         <md-input-container style="width: 95%;">
           <div ng-if="(field.type==='checkbox')">
-            <span
-              style="display: inline-block"
-            ></span>
+            <span style="display: inline-block"></span>
             <md-switch
               style="display: inline-block"
               name="option-type-enable"
-              ng-change="filterTasks(field)"
+              ng-change="filterTasks()"
               ng-model="field.enabled"
               aria-label="option-type"
               md-invert
@@ -41,13 +39,36 @@
             <md-switch
               style="display: inline-block"
               name="option-type"
-              ng-change="filterTasks(field)"
-              ng-model="filters[field.name]"
+              ng-change="filterTasks()"
+              ng-model="field.value"
               aria-label="option-type"
               md-invert
             >
               {{ field.description }}
             </md-switch>
+          </div>
+          <div ng-if="(field.type==='slider')">
+            <md-switch
+              style="display: inline-block; width: 40%"
+              name="option-type-enable"
+              ng-change="filterTasks()"
+              ng-model="field.enabled"
+              aria-label="option-type"
+              md-invert
+            >
+              {{ field.description }}
+            </md-switch>
+            <md-slider-container flex style="display: inline-block; width: 50%">
+              <md-slider
+                ng-model="field.value"
+                min="{{field.min}}"
+                max="{{field.max}}"
+                aria-label="field.value"
+                class="md-accent"
+                md-horizontal
+                ng-change="filterTasks()"
+              ></md-slider>
+            </md-slider-container>
           </div>
           <label ng-if="(field.type==='input')" for="option-type">{{
             field.description
@@ -55,8 +76,8 @@
           <input
             name="option-type"
             ng-if="(field.type==='input')"
-            ng-change="filterTasks(field.name)"
-            ng-model="filters[field.name]"
+            ng-change="filterTasks()"
+            ng-model="field.value"
             aria-label="option-type"
           />
         </md-input-container>
