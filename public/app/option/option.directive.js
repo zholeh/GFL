@@ -58,7 +58,7 @@
           if (typeof query === "boolean") {
             return query === val;
           } else {
-            var reg = new RegExp(query, "ui");
+            var reg = new RegExp(query, "i");
             return val.search(reg) !== -1;
           }
         });
