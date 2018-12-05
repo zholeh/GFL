@@ -35,24 +35,35 @@
     this.$scope.fields = [
       { name: "name", description: "Name", type: "input" },
       { name: "userId.name", description: "User name", type: "input" },
-      { name: "done", description: "Done", type: "checkbox" }
+      { name: "done", description: "Done", type: "checkbox", enabled: false }
     ];
 
     this.$scope.filterTasks = function(field) {
       var arrTasks = this.$parent.primaryTasks.concat();
       for (var key in $scope.filters) {
+        var query = $scope.filters[key];
+        if (typeof query === "string") {
+          query = query.trim();
+          if (query === "") {
+            break;
+          }
+        } else if (typeof query === "boolean") {
+          if (!field.enabled) {
+            break;
+          }
+        }
         var arrField = key.split(".");
         arrTasks = arrTasks.filter(function(el) {
-          var query = $scope.filters[key];
           var val = deepValue(el, arrField);
-
-          if (!!query && !!val) {
+          if (typeof query === "boolean") {
+            return query === val;
+          } else {
             var reg = new RegExp(query, "ui");
             return val.search(reg) !== -1;
-          } else return true;
+          }
         });
       }
-      this.$parent.tasks = arrTasks;
+      this.$parent.$parent.tasks = arrTasks;
     };
 
     this.$scope.sort = function(field, direct) {

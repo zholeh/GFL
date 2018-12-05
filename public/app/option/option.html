@@ -24,8 +24,41 @@
     <md-content>
       <div ng-repeat="field in fields">
         <md-input-container style="width: 95%;">
-          <label>{{ field.description }}</label>
-          <input ng-change="filterTasks(field.name)" ng-model="filters[field.name]"/>
+          <div ng-if="(field.type==='checkbox')">
+            <span
+              style="display: inline-block"
+            ></span>
+            <md-switch
+              style="display: inline-block"
+              name="option-type-enable"
+              ng-change="filterTasks(field)"
+              ng-model="field.enabled"
+              aria-label="option-type"
+              md-invert
+            >
+              Enable
+            </md-switch>
+            <md-switch
+              style="display: inline-block"
+              name="option-type"
+              ng-change="filterTasks(field)"
+              ng-model="filters[field.name]"
+              aria-label="option-type"
+              md-invert
+            >
+              {{ field.description }}
+            </md-switch>
+          </div>
+          <label ng-if="(field.type==='input')" for="option-type">{{
+            field.description
+          }}</label>
+          <input
+            name="option-type"
+            ng-if="(field.type==='input')"
+            ng-change="filterTasks(field.name)"
+            ng-model="filters[field.name]"
+            aria-label="option-type"
+          />
         </md-input-container>
       </div>
     </md-content>
