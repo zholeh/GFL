@@ -45,11 +45,11 @@
         if (typeof query === "string") {
           query = query.trim();
           if (query === "") {
-            break;
+            continue;
           }
         } else if (typeof query === "boolean") {
           if (!field.enabled) {
-            break;
+            continue;
           }
         }
         var arrField = key.split(".");
